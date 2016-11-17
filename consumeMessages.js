@@ -14,7 +14,6 @@ function readMessage () {
   let message
   return queue
     .readMessageFromQueue(config.secure.azure.queueName)
-    .then(msg => { console.log(new Date()); return msg })
     .then(msg => {
       message = msg
       if (!msg) {
@@ -25,10 +24,6 @@ function readMessage () {
 
       return msg
     })
-    .then(msg =>{
-        console.log(JSON.stringify(msg,null,4).blue);
-        return msg
-    })
     .then(msg => JSON.parse(msg.body))
     .then(addDescription)
     .then(handleMessage)
@@ -37,9 +32,7 @@ function readMessage () {
     .then(() => { console.log('Delete done: ', new Date())})
     .catch(e => {
       if (e.message !== 'abort_chain') {
-        console.log("In Error ".red + new Date())
-        console.log("\nIn Error handling function testing to remove the message from queue.....", JSON.stringify(message,null,4).yellow,e)
-        //console.error(`Exception: `, e)
+        console.log("\nIn Error after trying to read/remove the message from queue.....", JSON.stringify(message,null,4).yellow, e.red)
       }
     }).finally(readMessage)
 }

@@ -12,11 +12,11 @@ module.exports = function (msg) {
     return handleCourseMessage(msg)
   }
   else if (msg._desc.type === type.user) {
-    console.log("\nHandling message for user...".green,msg.ug1Name)
+    console.log("\nHandling message for user...".green, msg)
     return  handleUserMessage(msg)
   }
   else {
-    console.log("\nMessage type irrelevant for this app.....".red,msg._desc.type)
-    Promise.resolve("Message type irrelevant for this app....." + msg._desc.type)
+    console.log("\nMessage type irrelevant for this app.....".red)
+    return Promise.resolve("Message type irrelevant for this app.....")
   }
 }

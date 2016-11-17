@@ -16,39 +16,38 @@ function isInScope(msg)
 function createCanvasUser(msg) {
 
     if (msg.username && (msg.given_name || msg.family_name) &&  msg.username &&  msg.primary_emai &&  msg.kthid)
-    {
-    let  user = {
-        pseudonym: {unique_id: `${msg.username}@kth.se`}, // CSVs analogi av 'login_id'
-user: {
-    'name': `${msg.given_name} ${msg.family_name}`, // CSVs analogi av 'full_name'
-    'username': msg.username, // inte säker
-        'email': msg.primary_email,
-        'sis-integration-id': msg.kthid // prova om det är rätt analog av CSVs 'user_id'
-}}
-console.info("Creating canvas User:  " + JSON.stringify(user,null,4))
-}
-else
-return false
+        {
+            let  user = {
+                pseudonym: {unique_id: `${msg.username}@kth.se`}, // CSVs analogi av 'login_id'
+                user: {
+                    'name': `${msg.given_name} ${msg.family_name}`, // CSVs analogi av 'full_name'
+                    'username': msg.username, // inte säker
+                    'email': msg.primary_email,
+                    'sis-integration-id': msg.kthid // prova om det är rätt analog av CSVs 'user_id'
+                }}
+            console.info("Creating canvas User:  " + JSON.stringify(user,null,4))
+        }
+    else return false
 }
 
 module.exports = function (msg) {
-    console.info('\nProcessing for msg..... ' + msg.ugClass + ' ' + msg.kthid)
-    if (isInScope(msg)) {
+    console.info('\nProcessing for user msg..... ' + msg.ugClass + ' ' + msg.kthid, " msg affiliation ", msg.affiliation)
+  //  if (isInScope(msg)) {
         let user = createCanvasUser(msg)
         if (user) {
             return canvasApi.updateUser(user, user.pseudonym.unique_id)
                     .catch(e => canvasApi.createUser(user))
             .then(user =>
-            console.info(`${user.pseudonym.unique_id} is created in canvas`))
+            console.info(`${user.pseudonym.unique_id} is created/updated in canvas`))
         }
         else {
             console.log("\nIncomplete fields to create user in cavas.....")
-            return Promise.resolve("User feels missing...")
+            return Promise.resolve("User fields missing...")
         }
-    }
-    else
-    {
-    console.info('\nUser not in affiliation scope..... ' + msg.ugClass + ' ' + msg.kthid )
-    return Promise.resolve("User not in affiliation scope...")
-    }
+    // }
+    // else
+    // {
+    // console.info('\nUser not in affiliation scope..... ' + msg.ugClass + ' ' + msg.kthid )
+    // return Promise.resolve("User not in affiliation scope...")
+    // }
 }
