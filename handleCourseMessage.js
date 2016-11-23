@@ -69,7 +69,7 @@ function _process (msg) {
 
   return canvasApi.getCourse(sisCourseCode)
       .then(result => {
-        console.log("before")
+        console.log("START CREATING CSV FILE".green)
         msg.member.map(user => csvString += `${course},${user},${msgtype}, active\n`)
         let data = header + csvString
         console.info(data)

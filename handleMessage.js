@@ -8,7 +8,7 @@ module.exports = function (msg) {
   }
 
   if (msg._desc.type === type.course) {
-    console.log("\nHandling message for course...".green,msg.ug1Name)
+    console.log("\nHandling message for course...".green)
     return handleCourseMessage(msg)
   }
   else if (msg._desc.type === type.user) {
